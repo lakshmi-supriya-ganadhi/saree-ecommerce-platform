@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude --version)",
+      "Read(//Users/lakshmisupriya/.claude/**)",
+      "Bash(claude mcp *)",
+      "Bash(npx --yes create-next-app@latest . --typescript --tailwind --app --eslint --src-dir --import-alias \"@/*\" --no-turbopack --use-npm --skip-install)"
+    ]
+  }
+}
