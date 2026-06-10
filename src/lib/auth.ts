@@ -5,8 +5,6 @@ import { signSession, verifySession } from "./session";
 
 export const SESSION_COOKIE = "saree_session";
 
-// Seeded users. In a real app these live in a DB with hashed passwords.
-// Demo credentials are shown on the login page for convenience.
 const USERS: (User & { password: string })[] = [
   {
     id: "u1",
@@ -32,6 +30,28 @@ export function authenticate(email: string, password: string): User | null {
   return user;
 }
 
+/**
+ * Register a new user at runtime (in-memory only — resets on server restart).
+ * Returns the new user or null if the email is already taken.
+ */
+export function registerUser(
+  name: string,
+  email: string,
+  password: string,
+): User | null {
+  const normalised = email.toLowerCase().trim();
+  if (USERS.find((u) => u.email === normalised)) return null;
+  const newUser = {
+    id: `u${USERS.length + 1}`,
+    name: name.trim(),
+    email: normalised,
+    password,
+  };
+  USERS.push(newUser);
+  const { password: _pw, ...user } = newUser;
+  return user;
+}
+
 /** Read the current user from the session cookie, or null if signed out. */
 export async function getCurrentUser(): Promise<User | null> {
   const store = await cookies();
@@ -51,7 +71,7 @@ export async function createSession(userId: string): Promise<void> {
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
   });
 }
 
