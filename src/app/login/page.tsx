@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { loginAction, type LoginState } from "@/app/actions";
 
 const initialState: LoginState = {};
@@ -69,6 +70,13 @@ export default function LoginPage() {
           <p className="font-semibold">Demo credentials</p>
           <p>Email: demo@saree.shop · Password: saree123</p>
         </div>
+
+        <p className="mt-4 text-center text-sm text-neutral-500">
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className="font-medium text-rose-600 hover:text-rose-700">
+            Sign up →
+          </Link>
+        </p>
       </div>
     </section>
   );
