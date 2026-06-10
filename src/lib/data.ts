@@ -1,9 +1,5 @@
 import type { Saree } from "./types";
 
-// Seeded catalogue. This is the single source of truth for products today.
-// To go "real" later, replace these functions with DB queries (e.g. Supabase) —
-// the rest of the app only depends on getSarees() / getSaree().
-
 const SAREES: Saree[] = [
   {
     id: "kanchi-red",
@@ -16,6 +12,8 @@ const SAREES: Saree[] = [
     description:
       "Handwoven pure mulberry silk with a contrast zari border and traditional temple motifs.",
     inStock: true,
+    occasion: "Bridal",
+    rating: 4.8,
   },
   {
     id: "banarasi-gold",
@@ -28,6 +26,8 @@ const SAREES: Saree[] = [
     description:
       "Classic Banarasi with intricate gold zari brocade — a timeless wedding heirloom.",
     inStock: true,
+    occasion: "Bridal",
+    rating: 4.6,
   },
   {
     id: "mysore-teal",
@@ -40,6 +40,8 @@ const SAREES: Saree[] = [
     description:
       "Lightweight, lustrous crepe silk in deep teal — soft drape for everyday elegance.",
     inStock: true,
+    occasion: "Casual",
+    rating: 4.2,
   },
   {
     id: "chanderi-pink",
@@ -52,6 +54,8 @@ const SAREES: Saree[] = [
     description:
       "Sheer Chanderi with delicate buti work and a glossy finish — ideal for daytime functions.",
     inStock: true,
+    occasion: "Office",
+    rating: 4.3,
   },
   {
     id: "georgette-navy",
@@ -64,6 +68,8 @@ const SAREES: Saree[] = [
     description:
       "Flowy georgette with sequin embellishments — modern party-ready styling.",
     inStock: true,
+    occasion: "Party",
+    rating: 4.4,
   },
   {
     id: "linen-olive",
@@ -76,6 +82,8 @@ const SAREES: Saree[] = [
     description:
       "Breathable handloom linen with a subtle slub texture — effortless office wear.",
     inStock: true,
+    occasion: "Office",
+    rating: 4.1,
   },
   {
     id: "patola-maroon",
@@ -88,6 +96,8 @@ const SAREES: Saree[] = [
     description:
       "Rare double-ikat Patola, hand-dyed and woven over months — a collector's piece.",
     inStock: false,
+    occasion: "Bridal",
+    rating: 4.9,
   },
   {
     id: "tussar-mustard",
@@ -100,6 +110,8 @@ const SAREES: Saree[] = [
     description:
       "Natural tussar with hand-block prints and a rich golden sheen.",
     inStock: true,
+    occasion: "Casual",
+    rating: 4.0,
   },
   {
     id: "cotton-indigo",
@@ -112,6 +124,8 @@ const SAREES: Saree[] = [
     description:
       "Geometric Pochampally ikat in indigo — durable, comfortable, everyday cotton.",
     inStock: true,
+    occasion: "Casual",
+    rating: 3.9,
   },
   {
     id: "organza-lavender",
@@ -124,6 +138,8 @@ const SAREES: Saree[] = [
     description:
       "Crisp organza with digital floral prints and a satin border — light and dreamy.",
     inStock: true,
+    occasion: "Party",
+    rating: 4.5,
   },
 ];
 
