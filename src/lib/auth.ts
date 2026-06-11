@@ -52,6 +52,14 @@ export function registerUser(
   return user;
 }
 
+/** Update a user's display name in-memory. Returns false if userId not found. */
+export function updateUserName(userId: string, name: string): boolean {
+  const match = USERS.find((u) => u.id === userId);
+  if (!match) return false;
+  match.name = name.trim();
+  return true;
+}
+
 /** Read the current user from the session cookie, or null if signed out. */
 export async function getCurrentUser(): Promise<User | null> {
   const store = await cookies();

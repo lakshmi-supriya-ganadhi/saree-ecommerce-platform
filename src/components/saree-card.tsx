@@ -1,21 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import type { Saree } from "@/lib/types";
+import type { ColorVariant, Saree } from "@/lib/types";
 import { formatINR } from "@/lib/format";
 import { useCart } from "./cart-context";
+import { useWishlist } from "./wishlist-context";
 
 export function SareeCard({ saree }: { saree: Saree }) {
   const { add } = useCart();
+  const { add: wishlistAdd, remove: wishlistRemove, has } = useWishlist();
+  const [selected, setSelected] = useState<ColorVariant>(saree.variants[0]);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const wishlisted = has(saree.id);
 
   function handleAdd() {
-    for (let i = 0; i < quantity; i++) {
-      add(saree);
-    }
+    for (let i = 0; i < quantity; i++) add(saree, selected);
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
+  }
+
+  function toggleWishlist() {
+    if (wishlisted) wishlistRemove(saree.id);
+    else wishlistAdd(saree, selected);
   }
 
   const stepperBtn =
@@ -23,13 +30,27 @@ export function SareeCard({ saree }: { saree: Saree }) {
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900">
-      <div
-        className="relative flex h-48 items-end p-3"
-        style={{
-          background: `linear-gradient(135deg, ${saree.color} 0%, ${saree.color}99 60%, #00000022 100%)`,
-        }}
-      >
-        <span className="rounded-full bg-black/30 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={selected.image}
+          alt={`${saree.name} in ${selected.colorName}`}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+          onError={(e) => {
+            const t = e.currentTarget;
+            t.style.display = "none";
+            if (t.parentElement) {
+              t.parentElement.style.background = `linear-gradient(135deg, ${selected.hex} 0%, ${selected.hex}99 100%)`;
+            }
+          }}
+        />
+        <button
+          onClick={toggleWishlist}
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-lg shadow backdrop-blur hover:bg-white"
+        >
+          {wishlisted ? "♥" : "♡"}
+        </button>
+        <span className="absolute bottom-3 left-3 rounded-full bg-black/30 px-2.5 py-1 text-xs font-medium text-white backdrop-blur">
           {saree.region}
         </span>
       </div>
@@ -48,12 +69,12 @@ export function SareeCard({ saree }: { saree: Saree }) {
           <span className="text-sm text-amber-500">★ {saree.rating.toFixed(1)}</span>
           <span
             className={`text-xs font-medium ${
-              saree.inStock
+              selected.inStock
                 ? "text-green-600 dark:text-green-400"
                 : "text-neutral-400 dark:text-neutral-500"
             }`}
           >
-            {saree.inStock ? "In Stock" : "Sold Out"}
+            {selected.inStock ? "In Stock" : "Sold Out"}
           </span>
         </div>
 
@@ -61,12 +82,32 @@ export function SareeCard({ saree }: { saree: Saree }) {
           {saree.description}
         </p>
 
+        <div className="flex gap-1.5">
+          {saree.variants.map((v) => (
+            <button
+              key={v.colorName}
+              onClick={() => {
+                setSelected(v);
+                setQuantity(1);
+              }}
+              title={v.colorName}
+              aria-label={v.colorName}
+              className={`h-6 w-6 rounded-full border-2 transition ${
+                selected.colorName === v.colorName
+                  ? "scale-110 border-rose-500"
+                  : "border-transparent hover:border-neutral-400"
+              }`}
+              style={{ backgroundColor: v.hex }}
+            />
+          ))}
+        </div>
+
         <div className="mt-auto flex flex-col gap-2 pt-2">
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-neutral-900 dark:text-neutral-50">
               {formatINR(saree.price)}
             </span>
-            {saree.inStock && (
+            {selected.inStock && (
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -86,13 +127,12 @@ export function SareeCard({ saree }: { saree: Saree }) {
               </div>
             )}
           </div>
-
           <button
             onClick={handleAdd}
-            disabled={!saree.inStock}
+            disabled={!selected.inStock}
             className="w-full rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300 dark:disabled:bg-neutral-700"
           >
-            {!saree.inStock ? "Unavailable" : added ? "Added ✓" : "Add to cart"}
+            {!selected.inStock ? "Unavailable" : added ? "Added ✓" : "Add to cart"}
           </button>
         </div>
       </div>

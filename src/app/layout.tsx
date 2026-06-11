@@ -2,18 +2,13 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart-context";
+import { WishlistProvider } from "@/components/wishlist-context";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { getCurrentUser } from "@/lib/auth";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "SareeSutra — Handwoven Sarees",
@@ -22,9 +17,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const user = await getCurrentUser();
 
   return (
@@ -34,10 +27,13 @@ export default async function RootLayout({
     >
       <body className="min-h-full bg-rose-50/30 dark:bg-neutral-950">
         <CartProvider>
-          <Header user={user} />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
-            {children}
-          </main>
+          <WishlistProvider>
+            <Header user={user} />
+            <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+              {children}
+            </main>
+            <Footer />
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

@@ -8,6 +8,15 @@ import { logoutAction } from "@/app/actions";
 export function Header({ user }: { user: User | null }) {
   const { count } = useCart();
 
+  const initials = user
+    ? user.name
+        .split(" ")
+        .map((w) => w[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "";
+
   return (
     <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/90 backdrop-blur dark:border-rose-950 dark:bg-neutral-950/90">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
@@ -38,10 +47,14 @@ export function Header({ user }: { user: User | null }) {
                   </span>
                 )}
               </Link>
-              <span className="hidden text-neutral-400 sm:inline">|</span>
-              <span className="hidden text-neutral-500 sm:inline">
-                Hi, {user.name}
-              </span>
+              <Link
+                href="/account"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-600 text-xs font-bold text-white hover:bg-rose-700"
+                aria-label="My account"
+                title={user.name}
+              >
+                {initials}
+              </Link>
               <form action={logoutAction}>
                 <button
                   type="submit"

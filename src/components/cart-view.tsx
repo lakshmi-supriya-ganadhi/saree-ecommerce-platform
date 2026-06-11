@@ -42,39 +42,45 @@ export function CartView() {
       </div>
 
       <div className="flex flex-col gap-3">
-        {items.map(({ saree, quantity }) => (
+        {items.map(({ saree, variant, quantity }) => (
           <div
-            key={saree.id}
+            key={`${saree.id}-${variant.colorName}`}
             className="flex items-center gap-4 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
           >
-            <div
-              className="h-16 w-16 shrink-0 rounded-lg"
-              style={{
-                background: `linear-gradient(135deg, ${saree.color}, ${saree.color}88)`,
-              }}
-            />
+            <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
+              <img
+                src={variant.image}
+                alt={saree.name}
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  const t = e.currentTarget;
+                  t.style.display = "none";
+                  if (t.parentElement) {
+                    t.parentElement.style.background = `linear-gradient(135deg, ${variant.hex}, ${variant.hex}88)`;
+                  }
+                }}
+              />
+            </div>
             <div className="min-w-0 flex-1">
               <h3 className="truncate font-medium text-neutral-900 dark:text-neutral-50">
                 {saree.name}
               </h3>
               <p className="text-sm text-neutral-500">
-                {saree.fabric} · {formatINR(saree.price)}
+                {variant.colorName} · {saree.fabric} · {formatINR(saree.price)}
               </p>
             </div>
 
             <div className="flex items-center gap-1.5">
               <button
-                onClick={() => setQuantity(saree.id, quantity - 1)}
+                onClick={() => setQuantity(saree.id, variant.colorName, quantity - 1)}
                 className="h-7 w-7 rounded-md border border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800"
                 aria-label="Decrease quantity"
               >
                 −
               </button>
-              <span className="w-6 text-center text-sm font-medium">
-                {quantity}
-              </span>
+              <span className="w-6 text-center text-sm font-medium">{quantity}</span>
               <button
-                onClick={() => setQuantity(saree.id, quantity + 1)}
+                onClick={() => setQuantity(saree.id, variant.colorName, quantity + 1)}
                 className="h-7 w-7 rounded-md border border-neutral-300 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-800"
                 aria-label="Increase quantity"
               >
@@ -87,7 +93,7 @@ export function CartView() {
             </div>
 
             <button
-              onClick={() => remove(saree.id)}
+              onClick={() => remove(saree.id, variant.colorName)}
               className="ml-1 text-neutral-400 hover:text-rose-600"
               aria-label="Remove item"
             >
@@ -99,17 +105,13 @@ export function CartView() {
 
       <div className="mt-6 flex flex-col items-end gap-3 border-t border-neutral-200 pt-6 dark:border-neutral-800">
         <div className="flex w-full max-w-xs items-center justify-between text-lg">
-          <span className="font-medium text-neutral-600 dark:text-neutral-300">
-            Total
-          </span>
+          <span className="font-medium text-neutral-600 dark:text-neutral-300">Total</span>
           <span className="font-bold text-neutral-900 dark:text-neutral-50">
             {formatINR(total)}
           </span>
         </div>
         <button
-          onClick={() =>
-            alert("Checkout is not part of this MVP — coming next! 🧾")
-          }
+          onClick={() => alert("Checkout is not part of this MVP — coming next! 🧾")}
           className="w-full max-w-xs rounded-lg bg-rose-600 px-5 py-3 font-medium text-white hover:bg-rose-700"
         >
           Proceed to checkout
