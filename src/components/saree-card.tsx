@@ -5,6 +5,7 @@ import type { ColorVariant, Saree } from "@/lib/types";
 import { formatINR } from "@/lib/format";
 import { useCart } from "./cart-context";
 import { useWishlist } from "./wishlist-context";
+import { FabricSwatch } from "./fabric-swatch";
 
 export function SareeCard({ saree }: { saree: Saree }) {
   const { add } = useCart();
@@ -31,18 +32,7 @@ export function SareeCard({ saree }: { saree: Saree }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900">
       <div className="relative h-48 overflow-hidden">
-        <img
-          src={selected.image}
-          alt={`${saree.name} in ${selected.colorName}`}
-          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-          onError={(e) => {
-            const t = e.currentTarget;
-            t.style.display = "none";
-            if (t.parentElement) {
-              t.parentElement.style.background = `linear-gradient(135deg, ${selected.hex} 0%, ${selected.hex}99 100%)`;
-            }
-          }}
-        />
+        <FabricSwatch hex={selected.hex} className="h-full w-full transition duration-300 group-hover:scale-105" />
         <button
           onClick={toggleWishlist}
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}

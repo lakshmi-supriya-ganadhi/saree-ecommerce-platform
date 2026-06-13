@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCart } from "./cart-context";
 import { formatINR } from "@/lib/format";
+import { FabricSwatch } from "./fabric-swatch";
 
 export function CartView() {
   const { items, total, count, setQuantity, remove, clear } = useCart();
@@ -48,18 +49,7 @@ export function CartView() {
             className="flex items-center gap-4 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
           >
             <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
-              <img
-                src={variant.image}
-                alt={saree.name}
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  const t = e.currentTarget;
-                  t.style.display = "none";
-                  if (t.parentElement) {
-                    t.parentElement.style.background = `linear-gradient(135deg, ${variant.hex}, ${variant.hex}88)`;
-                  }
-                }}
-              />
+              <FabricSwatch hex={variant.hex} />
             </div>
             <div className="min-w-0 flex-1">
               <h3 className="truncate font-medium text-neutral-900 dark:text-neutral-50">

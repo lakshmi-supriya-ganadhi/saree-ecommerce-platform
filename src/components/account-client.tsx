@@ -6,6 +6,7 @@ import type { Address, Order, User } from "@/lib/types";
 import { updateProfileAction, addAddressAction } from "@/app/actions";
 import { useWishlist } from "./wishlist-context";
 import { useCart } from "./cart-context";
+import { FabricSwatch } from "./fabric-swatch";
 import { formatINR } from "@/lib/format";
 
 type Tab = "profile" | "orders" | "wishlist" | "addresses";
@@ -203,7 +204,7 @@ function WishlistTab() {
           className="flex gap-3 rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900"
         >
           <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg">
-            <img src={variant.image} alt={saree.name} className="h-full w-full object-cover" />
+            <FabricSwatch hex={variant.hex} />
           </div>
           <div className="flex flex-1 flex-col gap-1">
             <p className="text-sm font-medium text-neutral-900 dark:text-neutral-50">
